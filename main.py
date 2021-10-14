@@ -13,7 +13,7 @@ mnist_trainset = datasets.FashionMNIST(
 
 crossEntropy = nn.CrossEntropyLoss()
 
-# torch.manual_seed(42)
+torch.manual_seed(42)
 
 BATCH_SIZE = 256
 
@@ -32,29 +32,16 @@ EPOCHS = 5
 print("Using {}".format(DEVICE))
 
 
-def calc_accuracy(
-    model, train=False
-):  # add train param to calculate accuracy on both train and test
-    # Calculate Accuracy
+def calc_accuracy(model, train=False):
     correct = 0
     total = 0
 
     d_loader = train_loader if train else test_loader
-    # Iterate through test dataset
     for images, labels in d_loader:
-        # Load images
         images, labels = images.to(DEVICE), labels.to(DEVICE)
-
-        # Forward pass only to get logits/output
         outputs = model(images)
-
-        # Get predictions from the maximum value
         _, predicted = torch.max(outputs.data, 1)
-
-        # Total number of labels
         total += labels.size(0)
-
-        # Total correct predictions
         correct += (predicted == labels).sum()
 
     accuracy = 100 * correct / total
