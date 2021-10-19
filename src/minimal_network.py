@@ -52,7 +52,7 @@ def q_loss(previous_pred, current_pred, actions, rewards):
 
 
 def train(network, buffer):
-    optimizer = torch.optim.SGD(network.parameters(), lr=1e-4)
+    optimizer = torch.optim.SGD(network.parameters(), lr=1e-2)
     optimizer.zero_grad()
 
     mini_batch = random.sample(buffer, 32)
