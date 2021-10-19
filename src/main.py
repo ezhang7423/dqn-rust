@@ -62,8 +62,6 @@ try:
                     np.asarray(sequence),
                 )
             )  # (state, action, reward, state')
-            print(len(pickle.dumps(REPLAY_BUFFER[0])))
-            exit(0)
             if len(REPLAY_BUFFER) >= 32:
                 train(q, REPLAY_BUFFER)
 
