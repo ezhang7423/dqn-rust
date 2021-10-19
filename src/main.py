@@ -12,7 +12,7 @@ from src.minimal_network import CNN, rgb2gray, train
 def save_experiment(signal, frame):
     print("Saving experiment info...")
     np.save("q_vals.npy", np.array(avg_q_vals))
-    torch.save(q, "q-network.torch")
+    torch.save(q.state_dict(), "q-network.torch")
     print("Finished saving!")
     env.close()
     sys.exit(0)
