@@ -35,42 +35,45 @@ initial = np.load("image_sample.npy")
 q = CNN()
 avg_q_vals = []
 
-print("Beginning training")
-for ep in range(EPISODES):
-    print(f"Starting episode {ep}, iterations: {iters}")
-    sequence = deque(initial, maxlen=4)
-    done = False
-    avg_q_val = 0
+try:
+    print("Beginning training")
+    for ep in range(EPISODES):
+        print(f"Starting episode {ep}, iterations: {iters}")
+        sequence = deque(initial, maxlen=4)
+        done = False
+        avg_q_val = 0
 
-    while not done:
-        if iters <= MILLION:
-            EPSILON -= iters / MILLION
-        if random.random() < EPSILON:
-            action = env.action_space.sample()
-        else:
-            action = torch.argmax(q()).item()
+        while not done:
+            if iters <= MILLION:
+                EPSILON -= iters / MILLION
+            if random.random() < EPSILON:
+                action = env.action_space.sample()
+            else:
+                action = torch.argmax(q(sequence)).item()
 
-        observation, reward, done, info = env.step(action)
-        previous_sequence = copy.deepcopy(sequence)
-        sequence.append(
-            rgb2gray(observation)[::2, ::2].astype(np.float32),
-        )
-        REPLAY_BUFFER.append(
-            (
-                np.asarray(previous_sequence),
-                action,
-                reward,
-                np.asarray(sequence),
+            observation, reward, done, info = env.step(action)
+            previous_sequence = copy.deepcopy(sequence)
+            sequence.append(
+                rgb2gray(observation)[::2, ::2].astype(np.float32),
             )
-        )  # (state, action, reward, state')
-        if len(REPLAY_BUFFER) >= 32:
-            train(q, REPLAY_BUFFER)
+            REPLAY_BUFFER.append(
+                (
+                    np.asarray(previous_sequence),
+                    action,
+                    reward,
+                    np.asarray(sequence),
+                )
+            )  # (state, action, reward, state')
+            if len(REPLAY_BUFFER) >= 32:
+                train(q, REPLAY_BUFFER)
 
-        avg_q_val = (avg_q_val * iters + action) / (iters + 1)
-        iters += 1
+            avg_q_val = (avg_q_val * iters + action) / (iters + 1)
+            iters += 1
 
-    avg_q_vals.append(avg_q_val)
-    observation = env.reset()
-    # np.save("image_sample.npy", np.asarray(sequence))
+        avg_q_vals.append(avg_q_val)
+        observation = env.reset()
+        # np.save("image_sample.npy", np.asarray(sequence))
 
-env.close()
+finally:
+    env.close()
+    save_experiment(None, None)

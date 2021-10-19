@@ -13,8 +13,8 @@ def rgb2gray(rgb):
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
-print("Using {}".format(DEVICE))
 
+print("Using {}".format(DEVICE))
 
 class CNN(nn.Module):
     def __init__(self):
