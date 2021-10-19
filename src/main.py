@@ -73,7 +73,8 @@ try:
         avg_q_vals.append(avg_q_val)
         observation = env.reset()
         # np.save("image_sample.npy", np.asarray(sequence))
-
+except Exception as e:
+    print(e)
 finally:
     env.close()
     save_experiment(None, None)
