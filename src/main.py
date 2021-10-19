@@ -1,6 +1,5 @@
 import copy
 import gym
-from gym.envs.classic_control import rendering
 import numpy as np
 from collections import deque
 import torch

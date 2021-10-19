@@ -4,10 +4,9 @@ todo: ADD REQUIREMENTS
 reimplementation of deep q network
 
 ```bash
-sudo apt install unrar -y
+sudo apt install unrar swig -y
 
-pip install gym
-pip install gym[atari]
+pip install -r requirements.txt
 
 wget http://www.atarimania.com/roms/Roms.rar
 tar -xvf Roms.rar
@@ -19,6 +18,5 @@ ale-import-roms ROMS
 rm Roms.rar
 
 cd ../..
-pip install -r requirements.txt
 python3 src/main.py
 ```
