@@ -18,9 +18,6 @@ def save_experiment(signal, frame):
     sys.exit(0)
 
 
-signal.signal(signal.SIGINT, save_experiment)
-
-
 env = gym.make("BreakoutDeterministic-v4", render_mode="rgb_array")
 observation = env.reset()
 
@@ -49,7 +46,7 @@ try:
             if random.random() < EPSILON:
                 action = env.action_space.sample()
             else:
-                action = torch.argmax(q(sequence)).item()
+                action = torch.argmax(q(torch.FloatTensor(sequence)[None, ...])).item()
 
             observation, reward, done, info = env.step(action)
             previous_sequence = copy.deepcopy(sequence)
