@@ -11,8 +11,8 @@ from src.minimal_network import CNN, rgb2gray, train
 
 def save_experiment(signal, frame):
     print("Saving experiment info...")
-    np.save("../q_vals.npy", np.array(avg_q_vals))
-    torch.save(q, "../q-network.torch")
+    np.save("q_vals.npy", np.array(avg_q_vals))
+    torch.save(q, "q-network.torch")
     print("Finished saving!")
     env.close()
     sys.exit(0)
@@ -31,7 +31,7 @@ EPISODES = MILLION
 iters = 0
 EPSILON = 1
 
-initial = np.load("../image_sample.npy")
+initial = np.load("image_sample.npy")
 q = CNN()
 avg_q_vals = []
 
@@ -71,6 +71,6 @@ for ep in range(EPISODES):
 
     avg_q_vals.append(avg_q_val)
     observation = env.reset()
-    # np.save("../image_sample.npy", np.asarray(sequence))
+    # np.save("image_sample.npy", np.asarray(sequence))
 
 env.close()
