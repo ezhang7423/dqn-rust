@@ -1,4 +1,5 @@
 import copy
+import pickle
 import gym
 import numpy as np
 from collections import deque
@@ -23,7 +24,7 @@ observation = env.reset()
 
 MILLION = int(1e7)
 it = 10
-REPLAY_BUFFER = deque(maxlen=MILLION)
+REPLAY_BUFFER = deque(maxlen=50000)
 EPISODES = MILLION
 iters = 0
 EPSILON = 1
@@ -61,6 +62,8 @@ try:
                     np.asarray(sequence),
                 )
             )  # (state, action, reward, state')
+            print(len(pickle.dumps(REPLAY_BUFFER[0])))
+            exit(0)
             if len(REPLAY_BUFFER) >= 32:
                 train(q, REPLAY_BUFFER)
 
