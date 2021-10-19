@@ -6,7 +6,7 @@ import torch
 import random
 import signal
 import sys
-from minimal_network import CNN, rgb2gray, train
+from src.minimal_network import CNN, rgb2gray, train
 
 
 def save_experiment(signal, frame):

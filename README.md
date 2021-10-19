@@ -15,8 +15,8 @@ unrar e Roms.rar roms
 cd roms
 unzip ROMS.zip
 ale-import-roms ROMS
-rm Roms.rar
 
-cd ../..
-python3 src/main.py
+cd ..
+rm Roms.rar
+python3 -m src.main
 ```
