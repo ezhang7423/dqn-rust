@@ -42,7 +42,7 @@ class CNN(nn.Module):
 
 
 def q_loss(previous_pred, current_pred, actions, rewards):
-    discount = .8
+    discount = .99
     reward_vec = np.zeros((32, 4))
     reward_vec[np.arange(32), actions] = rewards
     bellman = current_pred * discount + torch.FloatTensor(reward_vec)
@@ -52,7 +52,7 @@ def q_loss(previous_pred, current_pred, actions, rewards):
 
 
 def train(network, buffer):
-    optimizer = torch.optim.SGD(network.parameters(), lr=0.1)
+    optimizer = torch.optim.SGD(network.parameters(), lr=1e-4)
     optimizer.zero_grad()
 
     mini_batch = random.sample(buffer, 32)
