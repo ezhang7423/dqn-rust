@@ -1,11 +1,9 @@
 import copy
-import pickle
 import gym
 import numpy as np
 from collections import deque
 import torch
 import random
-import signal
 import sys
 from src.minimal_network import CNN, rgb2gray, train
 
@@ -30,7 +28,7 @@ iters = 0
 EPSILON = 1
 
 initial = np.load("image_sample.npy")
-q = CNN()
+q = CNN("q-network.torch")
 avg_q_vals = []
 
 try:

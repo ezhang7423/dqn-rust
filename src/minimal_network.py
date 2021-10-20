@@ -1,10 +1,8 @@
+import os
 import random
 import numpy as np
 import torch
 from torch import nn
-import torchvision
-import torchvision.datasets as datasets
-import matplotlib.pyplot as plt
 
 
 def rgb2gray(rgb):
@@ -16,8 +14,10 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 print("Using {}".format(DEVICE))
 
+
 class CNN(nn.Module):
-    def __init__(self):
+    def __init__(self, weights_path):
+
         super().__init__()
         self.block = nn.Sequential(
             # self.input
@@ -34,6 +34,8 @@ class CNN(nn.Module):
             nn.LeakyReLU(),
             nn.Linear(256, 4),
         )
+        if os.path.exists(weights_path):
+            self.load_state_dict(torch.load(weights_path))
 
     def forward(self, X):
         return self.block(X)
@@ -42,7 +44,7 @@ class CNN(nn.Module):
 
 
 def q_loss(previous_pred, current_pred, actions, rewards):
-    discount = .99
+    discount = 0.99
     reward_vec = np.zeros((32, 4))
     reward_vec[np.arange(32), actions] = rewards
     bellman = current_pred * discount + torch.FloatTensor(reward_vec)
