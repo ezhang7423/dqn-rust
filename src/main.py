@@ -10,7 +10,7 @@ from src.minimal_network import CNN, rgb2gray, train
 
 def save_experiment(signal, frame):
     print("Saving experiment info...")
-    np.save("q_vals.npy", np.array(avg_q_vals))
+    np.save("q-vals.npy", np.array(avg_q_vals))
     torch.save(q.state_dict(), "q-network.torch")
     print("Finished saving!")
     env.close()
@@ -29,7 +29,7 @@ EPSILON = 1
 
 initial = np.load("image_sample.npy")
 q = CNN("q-network.torch")
-avg_q_vals = []
+avg_q_vals = np.load("q-vals.npy").tolist()
 
 try:
     print("Beginning training")
