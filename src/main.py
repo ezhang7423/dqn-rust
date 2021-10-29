@@ -24,7 +24,8 @@ observation = env.reset()
 MILLION = int(1e7)
 it = 10
 REPLAY_BUFFER = deque(maxlen=50000)
-EPISODES = MILLION
+TOTAL_EPISODES = MILLION
+eps = 0
 iters = 0
 EPSILON = 1
 
@@ -34,7 +35,7 @@ avg_q_vals = np.load("q-vals.npy").tolist()
 
 try:
     print("Beginning training")
-    for ep in range(EPISODES):
+    for ep in range(TOTAL_EPISODES):
         print(f"Starting episode {ep}, iterations: {iters}")
         sequence = deque(initial, maxlen=4)
         done = False
@@ -46,7 +47,9 @@ try:
             if random.random() < EPSILON:
                 action = env.action_space.sample()
             else:
-                action = torch.argmax(q(torch.FloatTensor(sequence).to(DEVICE)[None, ...])).item()
+                action = torch.argmax(
+                    q(torch.FloatTensor(sequence).to(DEVICE)[None, ...])
+                ).item()
 
             observation, reward, done, info = env.step(action)
             previous_sequence = copy.deepcopy(sequence)
@@ -61,13 +64,16 @@ try:
                     np.asarray(sequence),
                 )
             )  # (state, action, reward, state')
-            if len(REPLAY_BUFFER) >= 3200:
-                train(q, REPLAY_BUFFER)
 
             avg_q_val = (avg_q_val * iters + action) / (iters + 1)
             iters += 1
+
+        if eps % 10 == 0 and len(REPLAY_BUFFER) >= 3200:
+            train(q, REPLAY_BUFFER)
+
         print(f"Avg q val: {avg_q_val}")
         avg_q_vals.append(avg_q_val)
+        eps += 1
         observation = env.reset()
         # np.save("image_sample.npy", np.asarray(sequence))
 except Exception as e:
