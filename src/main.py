@@ -46,7 +46,7 @@ try:
             if random.random() < EPSILON:
                 action = env.action_space.sample()
             else:
-                action = torch.argmax(q(torch.FloatTensor(sequence)[None, ...])).item()
+                action = torch.argmax(q(torch.FloatTensor(sequence).to(DEVICE)[None, ...])).item()
 
             observation, reward, done, info = env.step(action)
             previous_sequence = copy.deepcopy(sequence)
