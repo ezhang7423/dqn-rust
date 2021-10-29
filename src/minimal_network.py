@@ -47,7 +47,7 @@ def q_loss(previous_pred, current_pred, actions, rewards):
     discount = 0.99
     reward_vec = np.zeros((32, 4))
     reward_vec[np.arange(32), actions] = rewards
-    bellman = current_pred * discount + torch.FloatTensor(reward_vec)
+    bellman = current_pred * discount + torch.FloatTensor(reward_vec).to(DEVICE)
     loss = torch.mean((previous_pred - bellman) ** 2)
     # print(loss)
     return loss
