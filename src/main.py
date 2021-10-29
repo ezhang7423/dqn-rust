@@ -1,3 +1,4 @@
+import traceback
 import copy
 import gym
 import numpy as np
@@ -70,7 +71,7 @@ try:
         observation = env.reset()
         # np.save("image_sample.npy", np.asarray(sequence))
 except Exception as e:
-    print(e)
+    print(traceback.format_exc())
 finally:
     env.close()
     save_experiment(None, None)
