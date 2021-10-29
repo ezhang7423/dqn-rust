@@ -57,15 +57,17 @@ def train(network, buffer):
     optimizer = torch.optim.SGD(network.parameters(), lr=1e-2)
     optimizer.zero_grad()
 
-    mini_batch = random.sample(buffer, 32)
+    print('Starting train loop')
+    for iteration in range(100):
+        mini_batch = random.sample(buffer, 32)
 
-    previous = torch.FloatTensor([s[0] for s in mini_batch])
-    actions = np.array([s[1] for s in mini_batch])
-    rewards = [s[2] for s in mini_batch]
-    current = torch.FloatTensor([s[3] for s in mini_batch])
+        previous = torch.FloatTensor([s[0] for s in mini_batch]).to(DEVICE)
+        actions = np.array([s[1] for s in mini_batch])
+        rewards = [s[2] for s in mini_batch]
+        current = torch.FloatTensor([s[3] for s in mini_batch]).to(DEVICE)
 
-    previous_pred = network(previous)
-    current_pred = network(current)
-    loss = q_loss(previous_pred, current_pred, actions, rewards)
-    loss.backward()
-    optimizer.step()
+        previous_pred = network(previous)
+        current_pred = network(current)
+        loss = q_loss(previous_pred, current_pred, actions, rewards)
+        loss.backward()
+        optimizer.step()

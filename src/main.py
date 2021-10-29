@@ -5,7 +5,7 @@ from collections import deque
 import torch
 import random
 import sys
-from src.minimal_network import CNN, rgb2gray, train
+from src.minimal_network import CNN, DEVICE, rgb2gray, train
 
 
 def save_experiment(signal, frame):
@@ -28,7 +28,7 @@ iters = 0
 EPSILON = 1
 
 initial = np.load("image_sample.npy")
-q = CNN("q-network.torch")
+q = CNN("q-network.torch").to(DEVICE)
 avg_q_vals = np.load("q-vals.npy").tolist()
 
 try:
@@ -60,12 +60,12 @@ try:
                     np.asarray(sequence),
                 )
             )  # (state, action, reward, state')
-            if len(REPLAY_BUFFER) >= 32:
+            if len(REPLAY_BUFFER) >= 3200:
                 train(q, REPLAY_BUFFER)
 
             avg_q_val = (avg_q_val * iters + action) / (iters + 1)
             iters += 1
-
+        print(f"Avg q val: {avg_q_val}")
         avg_q_vals.append(avg_q_val)
         observation = env.reset()
         # np.save("image_sample.npy", np.asarray(sequence))
