@@ -69,6 +69,5 @@ def train(network, buffer):
         previous_pred = network(previous)
         current_pred = network(current)
         loss = q_loss(previous_pred, current_pred, actions, rewards)
-        print('Loss:', loss)
         loss.backward()
         optimizer.step()
